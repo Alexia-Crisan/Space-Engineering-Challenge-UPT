@@ -34,6 +34,15 @@ float Sensors::readBME280_Press() {}
 float Sensors::readDHT22_Temp() {}
 float Sensors::readDHT22_Hum() {}
 
+SensorData Sensors::getAverages() const
+{
+    SensorData data;
+    data.temperature = tempBuffer.average();
+    data.humidity = humBuffer.average();
+    data.pressure = pressBuffer.average();
+    return data;
+}
+
 // ================= FSM TASK =================
 void Sensors::sensorTask()
 {
@@ -83,13 +92,4 @@ void Sensors::sensorTask()
         break;
     }
     }
-}
-
-SensorData Sensors::getAverages() const
-{
-    SensorData data;
-    data.temperature = tempBuffer.average();
-    data.humidity = humBuffer.average();
-    data.pressure = pressBuffer.average();
-    return data;
 }
