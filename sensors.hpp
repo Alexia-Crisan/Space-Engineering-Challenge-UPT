@@ -5,7 +5,7 @@
 #include <numeric>
 #include <iostream>
 
-#define DHT22_PIN
+#define DHT22_PIN 4 // GPIO4 for DHT22
 #define BME280_PIN
 
 struct SensorData
@@ -49,9 +49,9 @@ public:
 
     SensorData getAverages() const;
 
-    float readBME280_Temp();
-    float readBME280_Hum();
-    float readBME280_Press();
+    // float readBME280_Temp();
+    // float readBME280_Hum();
+    // float readBME280_Press();
     float readDHT22_Temp();
     float readDHT22_Hum();
 };
