@@ -7,16 +7,41 @@ namespace SensorApp
     {
         static void Main(string[] args)
         {
-            //Console.WriteLine("Initializing sensors...");
+            Console.WriteLine("[SYSTEM] Initializing sensors and motors...");
 
-            //using var sensors = new Sensors(10);
-
+            using var sensors = new Sensors(10);
             var motor = new MotorController();
+
+            Console.WriteLine("[SYSTEM] Ready.");
             Console.WriteLine("Use arrow keys to control the robot. Press ESC to quit.");
 
+            var sensorThread = new Thread(() =>
+            {
+                try
+                {
+                    while (true)
+                    {
+                        sensors.SensorTask();
+                        Thread.Sleep(500);
+                    }
+                }
+                catch (ThreadInterruptedException)
+                {
+                    Console.WriteLine("[SENSORS] Thread stopped.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"[ERROR] Sensor thread exception: {ex.Message}");
+                }
+            })
+            {
+                IsBackground = true,
+                Name = "SensorThread"
+            };
+
+            sensorThread.Start();
             while (true)
             {
-                //sensors.SensorTask();
                 if (Console.KeyAvailable)
                 {
                     var key = Console.ReadKey(true).Key;
@@ -35,9 +60,10 @@ namespace SensorApp
                             motor.Right();
                             break;
                         case ConsoleKey.Escape:
+                            Console.WriteLine("[SYSTEM] Exiting...");
                             motor.Stop();
                             motor.Cleanup();
-                            Console.WriteLine("Exiting...");
+                            sensorThread.Interrupt();
                             return;
                         default:
                             motor.Stop();
@@ -49,7 +75,7 @@ namespace SensorApp
                     motor.Stop();
                 }
 
-                Thread.Sleep(1000);
+                Thread.Sleep(100);
             }
         }
     }
