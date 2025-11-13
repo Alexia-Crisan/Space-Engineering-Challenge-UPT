@@ -149,15 +149,56 @@ namespace SensorApp
 
         private SensorData ReadSensors()
         {
-            var read1 = _bme280_1.Read();
-            var read2 = _bme280_2.Read();
+            double t1 = 0, t2 = 0;
+            double h1 = 0, h2 = 0;
+            double p1 = 0, p2 = 0;
 
-            double t1 = read1.Temperature?.DegreesCelsius ?? 0;
-            double t2 = read2.Temperature?.DegreesCelsius ?? 0;
-            double h1 = read1.Humidity?.Percent ?? 0;
-            double h2 = read2.Humidity?.Percent ?? 0;
-            double p1 = read1.Pressure?.Hectopascals ?? 0;
-            double p2 = read2.Pressure?.Hectopascals ?? 0;
+            if (_bme280_1 != null)
+            {
+                try
+                {
+                    var read1 = _bme280_1.Read();
+                    t1 = read1.Temperature?.DegreesCelsius ?? 0;
+                    h1 = read1.Humidity?.Percent ?? 0;
+                    p1 = read1.Pressure?.Hectopascals ?? 0;
+                }
+                catch
+                {
+                    _bme280_1 = null;
+                    Console.WriteLine("[WARN] BME280 #1 read failed.");
+                }
+            }
+
+            if (_bme280_2 != null)
+            {
+                try
+                {
+                    var read2 = _bme280_2.Read();
+                    t2 = read2.Temperature?.DegreesCelsius ?? 0;
+                    h2 = read2.Humidity?.Percent ?? 0;
+                    p2 = read2.Pressure?.Hectopascals ?? 0;
+                }
+                catch
+                {
+                    _bme280_2 = null;
+                    Console.WriteLine("[WARN] BME280 #2 read failed.");
+                }
+            }
+
+            if (_bme280_1 == null && _bme280_2 == null)
+            {
+                t1 = t2 = _tempBuffer.Average();
+                h1 = h2 = _humBuffer.Average();
+                p1 = p2 = _pressBuffer.Average();
+            }
+            else if (_bme280_1 == null)
+            {
+                t1 = t2; h1 = h2; p1 = p2;
+            }
+            else if (_bme280_2 == null)
+            {
+                t2 = t1; h2 = h1; p2 = p1;
+            }
 
             double tDiff = Math.Abs(t1 - t2);
             double hDiff = Math.Abs(h1 - h2);
@@ -166,20 +207,23 @@ namespace SensorApp
             bool warning = false;
             string warningType = "";
 
-            if (tDiff > _tempThreshold)
+            if (_bme280_1 != null && _bme280_2 != null)
             {
-                warning = true;
-                warningType += "Temp ";
-            }
-            if (hDiff > _humThreshold)
-            {
-                warning = true;
-                warningType += "Hum ";
-            }
-            if (pDiff > _pressThreshold)
-            {
-                warning = true;
-                warningType += "Press ";
+                if (tDiff > _tempThreshold) 
+                {
+                    warning = true;
+                    warningType += "Temp ";
+                }
+                if (hDiff > _humThreshold)
+                { 
+                    warning = true;
+                    warningType += "Hum ";
+                }
+                if (pDiff > _pressThreshold)
+                {
+                    warning = true;
+                    warningType += "Press ";
+                }
             }
 
             if (DateTime.Now - _lastLogTime >= _logInterval)
@@ -195,9 +239,9 @@ namespace SensorApp
             
             return new SensorData
             {
-                Temperature = warning ? _tempBuffer.Average() : (t1 + t2) / 2,
-                Humidity = warning ? _humBuffer.Average() : (h1 + h2) / 2,
-                Pressure = warning ? _pressBuffer.Average() : (p1 + p2) / 2
+                Temperature = (t1 + t2) / 2,
+                Humidity = (h1 + h2) / 2,
+                Pressure = (p1 + p2) / 2
             };
         }
 
