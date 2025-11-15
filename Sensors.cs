@@ -54,8 +54,8 @@ namespace SensorApp
         private readonly SensorBuffer _humBuffer;
         private readonly SensorBuffer _pressBuffer;
 
-        private readonly Bme280 _bme280_1;
-        private readonly Bme280 _bme280_2;
+        private Bme280? _bme280_1;
+        private Bme280? _bme280_2;
         private SensorState _state;
 
         // thresholds
@@ -75,19 +75,31 @@ namespace SensorApp
             _pressBuffer = new SensorBuffer(bufferSize);
             _state = SensorState.Idle;
 
-            var i2c1 = new I2cConnectionSettings(1, 0x76);
-            var i2cDev1 = I2cDevice.Create(i2c1);
-            _bme280_1 = new Bme280(i2cDev1)
+            try
             {
-                TemperatureSampling = Sampling.LowPower,
-                PressureSampling = Sampling.LowPower,
-                HumiditySampling = Sampling.LowPower
-            };
-            _bme280_1.SetPowerMode(Bmx280PowerMode.Normal);
-            Console.WriteLine("[INFO] BME280 #1 detected at 0x76");
+                var i2c1 = new I2cConnectionSettings(1, 0x76);
+                var i2cDev1 = I2cDevice.Create(i2c1);
 
+                _bme280_1 = new Bme280(i2cDev1)
+                {
+                    TemperatureSampling = Sampling.LowPower,
+                    PressureSampling = Sampling.LowPower,
+                    HumiditySampling = Sampling.LowPower
+                };
+                _bme280_1.SetPowerMode(Bmx280PowerMode.Normal);
+                Console.WriteLine("[INFO] BME280 #1 detected at 0x76");
+            }
+            catch (Exception ex)
+            {
+                _bme280_1 = null;
+                Console.WriteLine("[WARN] BME280 #1 not detected! " + ex.Message);
+            }
+
+            try
+            {
             var i2c2 = new I2cConnectionSettings(1, 0x77);
             var i2cDev2 = I2cDevice.Create(i2c2);
+
             _bme280_2 = new Bme280(i2cDev2)
             {
                 TemperatureSampling = Sampling.LowPower,
@@ -96,6 +108,12 @@ namespace SensorApp
             };
             _bme280_2.SetPowerMode(Bmx280PowerMode.Normal);
             Console.WriteLine("[INFO] BME280 #2 detected at address 0x77");
+            }
+            catch
+            {
+                _bme280_2 = null;
+                Console.WriteLine("[WARN] BME280 #2 not detected! Running with a single sensor.");
+            }
 
             InitializeLogFile();
         }
