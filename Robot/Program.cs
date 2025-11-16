@@ -1,7 +1,9 @@
-using System;
+﻿using System;
 using System.Threading;
+using Motors;
+using SensorApp;
 
-namespace SensorApp
+namespace Robot
 {
     class Program
     {
