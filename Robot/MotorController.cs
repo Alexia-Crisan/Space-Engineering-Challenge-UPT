@@ -4,7 +4,9 @@ using System.Device.Pwm;
 using System.Device.Pwm.Drivers;
 using System.Threading;
 
-public class MotorController
+namespace Motors
+{
+    public class MotorController
     {
         private int AIN1 = 27;
         private int AIN2 = 17;
@@ -87,3 +89,4 @@ public class MotorController
             gpio.Dispose();
         }
     }
+}

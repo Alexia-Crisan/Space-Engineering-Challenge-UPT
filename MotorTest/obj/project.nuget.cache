@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "gRYdbeUUWc/0Xo1vAEOeYSciSt6Ps86Csb30yK+ZEKjXFP8/zhs1rmbzlO1HIpO7IWG6Q/wCAHt7Cj8riMS0Gg==",
+  "success": true,
+  "projectFilePath": "/home/carmen/Space-Engineering-Challenge-UPT/MotorTest/MotorTest.csproj",
+  "expectedPackageFiles": [
+    "/home/carmen/.nuget/packages/system.device.gpio/4.0.1/system.device.gpio.4.0.1.nupkg.sha512"
+  ],
+  "logs": []
+}
