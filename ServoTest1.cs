@@ -11,18 +11,18 @@ class Program
 
         servo.Start();
 
-        Console.WriteLine("Servo se mișcă automat de la 0° la 180° din 45° în 45°...");
+        Console.WriteLine("Servo moves automatically from 0° to 180° in 45° steps...");
 
         for (int angle = 0; angle <= 180; angle += 45)
         {
             servo.WriteAngle(angle);
-            Console.WriteLine($"→ Unghi: {angle}°");
+            Console.WriteLine($"→ Angle: {angle}°");
 
             if (angle < 180)
                 Thread.Sleep(3000);
         }
 
         servo.Stop();
-        Console.WriteLine("Gata!");
+        Console.WriteLine("Done!");
     }
 }
