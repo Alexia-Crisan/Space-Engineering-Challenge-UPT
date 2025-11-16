@@ -1,6 +1,6 @@
 # Subsurface Exploration Rover - Space Engineering Challenge 2025
 
-**Land Rover Edition — Subsurface Exploration Mission**  
+**Land Rover Edition - Subsurface Exploration Mission**  
 **Team: _[Cepheus]_**
 
 This repository contains the full hardware, software, and documentation package for our robotic rover developed for the **2025 Space Engineering Challenge by UPT**, focused on **subsurface autonomous and remote-controlled exploration** in cave-like environments.
@@ -82,6 +82,8 @@ Our rover is designed to traverse uneven underground terrain, navigate tight pas
 
 - **MG995 Servo Motor**  
   High-torque servo used for the object pickup mechanism.
+
+---
 
 ## Software Implementation
 
