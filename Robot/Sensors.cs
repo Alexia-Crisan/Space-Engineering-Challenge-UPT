@@ -123,7 +123,7 @@ namespace SensorApp
             if (!File.Exists(_logFilePath))
             {
                 File.WriteAllText(_logFilePath,
-                    "Timestamp,Temp1,Temp2,Hum1,Hum2,Press1,Press2,TempDiff,HumDiff,PressDiff,Warning\n");
+                    "Timestamp,Temp1,Temp2,Hum1,Hum2,Press1,Press2,TempDiff,HumDiff,PressDiff,TempAvg,HumAvg,PressAvg,Warning\n");
             }
         }
         
@@ -266,9 +266,13 @@ namespace SensorApp
         private void LogToCsv(double t1, double t2, double h1, double h2, double p1, double p2,
             double tDiff, double hDiff, double pDiff, string warning)
         {
+            double tAvg = (t1 + t2) / 2.0;
+            double hAvg = (h1 + h2) / 2.0;
+            double pAvg = (p1 + p2) / 2.0;
+
             string line =
                 $"{DateTime.Now:yyyy-MM-dd HH:mm:ss},{t1:0.00},{t2:0.00},{h1:0.00},{h2:0.00},{p1:0.00},{p2:0.00}," +
-                $"{tDiff:0.00},{hDiff:0.00},{pDiff:0.00},{warning}\n";
+                $"{tDiff:0.00},{hDiff:0.00},{pDiff:0.00},{tAvg:0.00},{hAvg:0.00},{pAvg:0.00},{warning}\n";
 
             File.AppendAllText(_logFilePath, line);
         }
