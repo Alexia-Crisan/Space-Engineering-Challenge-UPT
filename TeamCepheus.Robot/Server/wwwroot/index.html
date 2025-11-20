@@ -1,0 +1,38 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Team Cepheus - Brutus Remote Control</title>
+    <link rel="stylesheet" href="style.css" />
+    <script defer src="./reader.js"></script>
+    <script defer src="./jsQR.js"></script>
+</head>
+
+<body>
+
+    <video src="" id="video"></video>
+
+    <div id="overlay">
+        <div id="overlay-top-left">
+            Team Cepheus - Brutus Remote Control<br />
+            &copy; 2025 by Team Cepheus
+        </div>
+        <div id="overlay-top-right"></div>
+
+        <div id="overlay-bottom-left">
+            Use WASD to control motion. Q/E to drift to left/right.<br />
+            I/K to raise/lower speed. Space to brake.<br />
+            C to start/stop QR code scanning. O/L to raise/lower object pickup.
+        </div>
+        <div id="overlay-bottom-right">
+            <div id="log"></div>
+        </div>
+
+    </div>
+
+    <script src="app.js"></script>
+    <script src="webcam.js"></script>
+</body>
+
+</html>
