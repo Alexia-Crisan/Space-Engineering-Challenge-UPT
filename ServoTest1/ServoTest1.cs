@@ -20,7 +20,7 @@ class Program
 
         //     if (angle < 180)
         //         Thread.Sleep(3000);
-        // }
+        }
 
         servo.Stop();
         Console.WriteLine("Done!");
